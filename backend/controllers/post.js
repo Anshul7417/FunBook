@@ -1,5 +1,5 @@
 const post = require("../models/Post");
-createPost = async (req,res) => {
+exports.createPost = async (req,res) => {
     try {
         
         const newPostData = {
@@ -19,4 +19,3 @@ createPost = async (req,res) => {
     }
 }
 
-module.exports=createPost;

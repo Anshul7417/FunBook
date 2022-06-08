@@ -1,22 +1,8 @@
-const User = require("../models/User");
+const express = require("express");
+const {register}= require("../controllers/user")
 
-exports.register = async (req, res) => {
-    try {
+const router = express.Router();
 
-        const { name, email, password } = req.body;
+router.route("/register").post(register);
 
-        let user = await User.findOne({email});
-        if(user) {
-            return res
-                .status(400)
-                .json({ success: false, message: " User already exists " });
-        }
-            user  = await User.create({ name, email, password });
-
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                message: error.message,
-            });
-        }
-    }
+module.exports = router;
