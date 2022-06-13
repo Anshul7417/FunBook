@@ -42,16 +42,20 @@ const userSchema = new mongoose.Schema({
     }]
 })
 
-
-userSchema.pre("save",async function (next){
+ 
+userSchema.pre("save",async function (next){   //Hash the password
     if(this.isModified("password")){this.password = await bcrypt.hash(this.password,10);
     }
 
     next();
 })
 
-userSchema.methods.matchPassword = async function (password){
+userSchema.methods.matchPassword = async function (password){        // Comparing Passwords
     return await bcrypt.compare(password,this.password);
+}
+
+userSchema.methods.generateToken = function () {
+    return jwt.sign({_id:this._id},process.env.JWT_SECRET_KEY)
 }
 
 module.exports = mongoose.model("User",userSchema);
