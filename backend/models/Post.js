@@ -8,7 +8,7 @@ const postSchema = new mongoose.Schema({
         url: String,
     },
 
-    owner: {
+    owner: {      //id of the user that has posted
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
@@ -21,17 +21,21 @@ const postSchema = new mongoose.Schema({
     likes: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
+            ref: "User"      //json pointer to a schema
         },
     ],
 
-    comments: [
+    comments: [    // it includes user id and comment
         {
             user: {
-                type: mongoose.Schema.Types.ObjectId,
+                type: mongoose.Schema.Types.ObjectId, // it is just a configuration object for mongoose
                 ref: "User",
             },
-            comment: { type: String, required: true, }
+    comment: 
+    {
+                type: String,
+                required: true,
+            }
         }
     ]
 

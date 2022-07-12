@@ -14,14 +14,16 @@ exports.register = async (req, res) => {    // User Registeration
 
     user = await User.create({ name, email, password, avatar: { public_id: "sample_id", url: "sampleurl" } });
 
+
     const token = await user.generateToken();  // login after registering
 
     const options = {
       expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
       httpOnly: true,
     };
+    
 
-    res.status(200).cookie("token", token, options).json({
+    res.status(201).cookie("token", token, options).json({
       success: true,
       user,
       token,
@@ -326,30 +328,30 @@ exports.myProfile = async (req, res) => {
 };
 
 
-exports.getUserProfile = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id).populate(
-      "posts followers following"
-    );
+// exports.getUserProfile = async (req, res) => {
+//   try {
+//     const user = await User.findById(req.params.id).populate(
+//       "posts followers following"
+//     );
 
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
+//     if (!user) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "User not found",
+//       });
+//     }
 
-    res.status(200).json({
-      success: true,
-      user,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+//     res.status(200).json({
+//       success: true,
+//       user,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 
 
 exports.getAllUsers = async (req, res) => {
@@ -369,3 +371,142 @@ exports.getAllUsers = async (req, res) => {
     });
   }
 };
+
+// exports.forgotPassword = async (req, res) => {
+//   try {
+//     const user = await User.findOne({ email: req.body.email });
+
+//     if (!user) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "User not found",
+//       });
+//     }
+
+//     const resetPasswordToken = user.getResetPasswordToken();
+
+//     await user.save();
+
+//     const resetUrl = `${req.protocol}://${req.get(
+//       "host"
+//     )}/api/v1/password/reset/${resetPasswordToken}`;
+
+//     const message = `Reset Your Password by clicking on the link below: \n\n ${resetUrl}`;
+
+//     try {
+//       await sendEmail({
+//         email: user.email,
+//         subject: "Reset Password",
+//         message,
+//       });
+
+//       res.status(200).json({
+//         success: true,
+//         message: `Email sent to ${user.email}`,
+//       });
+//     } catch (error) {
+//       user.resetPasswordToken = undefined;
+//       user.resetPasswordExpire = undefined;
+//       await user.save();
+
+//       res.status(500).json({
+//         success: false,
+//         message: error.message,
+//       });
+//     }
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// exports.resetPassword = async (req, res) => {
+//   try {
+//     const resetPasswordToken = crypto
+//       .createHash("sha256")
+//       .update(req.params.token)
+//       .digest("hex");
+
+//     const user = await User.findOne({
+//       resetPasswordToken,
+//       resetPasswordExpire: { $gt: Date.now() },
+//     });
+
+//     if (!user) {
+//       return res.status(401).json({
+//         success: false,
+//         message: "Token is invalid or has expired",
+//       });
+//     }
+
+//     user.password = req.body.password;
+
+//     user.resetPasswordToken = undefined;
+//     user.resetPasswordExpire = undefined;
+//     await user.save();
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Password Updated",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// exports.getMyPosts = async (req, res) => {
+//   try {
+//     const user = await User.findById(req.user._id);
+
+//     const posts = [];
+
+//     for (let i = 0; i < user.posts.length; i++) {
+//       const post = await Post.findById(user.posts[i]).populate(
+//         "likes comments.user owner"
+//       );
+//       posts.push(post);
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       posts,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+// exports.getUserPosts = async (req, res) => {
+//   try {
+//     const user = await User.findById(req.params.id);
+
+//     const posts = [];
+
+//     for (let i = 0; i < user.posts.length; i++) {
+//       const post = await Post.findById(user.posts[i]).populate(
+//         "likes comments.user owner"
+//       );
+//       posts.push(post);
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       posts,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+
