@@ -1,28 +1,35 @@
 const Post = require("../models/Post");
 const User = require("../models/User");
+
+const cloudinary = require("cloudinary");
 exports.createPost = async (req, res) => {
   try {
+
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.image, {
+      folder: "posts",
+    });
+
     const newPostData = {
       caption: req.body.caption,
       image: {
-        public_id: "req.body.public_id",
-        url: "req.body.url",
+        public_id: myCloud.public_id,
+        url: myCloud.secret_url,
       },
 
       owner: req.user._id,
     };
 
-    const newPost = await Post.create(newPostData);
+    const post = await Post.create(newPostData);
 
     const user = await User.findById(req.user._id);
 
-    user.posts.push(newPost._id);   //newpost id pushed into posts array
+    user.posts.unshift(post._id);   //newpost id pushed into posts array
 
     await user.save();
 
     res.status(201).json({
       success: true,
-      post: newPost,
+      message: "Post Created",
     })
 
 
@@ -52,7 +59,7 @@ exports.deletePost = async (req, res) => {
       });
     }
 
-    //   await cloudinary.v2.uploader.destroy(post.image.public_id);
+    await cloudinary.v2.uploader.destroy(post.image.public_id);
 
     await post.remove();
 
@@ -78,10 +85,9 @@ exports.deletePost = async (req, res) => {
 
 exports.likeAndUnlikePost = async (req, res) => {
   try {
-    console.log(req.params.id);
 
-    const post = await Post.findById(req.params.id);   
-         // Error
+    const post = await Post.findById(req.params.id);
+    // Error
 
     if (!post) {
       return res.status(404).json({
@@ -111,9 +117,9 @@ exports.likeAndUnlikePost = async (req, res) => {
         message: " Post Liked",
       })
 
-    
 
-  }
+
+    }
 
   } catch (error) {
     res.status(500).json({
@@ -133,11 +139,11 @@ exports.getPostOfFollowing = async (req, res) => {
       owner: {
         $in: user.following,
       },
-    });
+    }).populate("owner likes comments.user");
 
     res.status(200).json({
       success: true,
-      posts,
+      posts: posts.reverse(),   // newest post first
     });
   } catch (error) {
     res.status(500).json({
@@ -231,7 +237,7 @@ exports.commentOnPost = async (req, res) => {
     });
   }
 };
-  
+
 
 exports.deleteComment = async (req, res) => {
   try {
