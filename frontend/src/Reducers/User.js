@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-const initialState = {isAuthenticated:false,};
+const initialState = {};
 
 export const userReducer = createReducer(initialState, {
   LoginRequest: (state) => {
@@ -31,7 +31,7 @@ export const userReducer = createReducer(initialState, {
   },
 
   LoadUserRequest: (state) => {
-    state.loading = true;    //load user is used to facilitate session after browser is closed.cookie stored ka btata h
+    state.loading = true;
   },
   LoadUserSuccess: (state, action) => {
     state.loading = false;
@@ -63,7 +63,7 @@ export const userReducer = createReducer(initialState, {
   },
 });
 
-export const postOfFollowingReducer = createReducer(initialState, {
+export const postOfFollowingReducer = createReducer(initialState, {          //for fetching posts
   postOfFollowingRequest: (state) => {
     state.loading = true;
   },
@@ -80,7 +80,7 @@ export const postOfFollowingReducer = createReducer(initialState, {
   },
 });
 
-export const allUsersReducer = createReducer(initialState, {
+export const allUsersReducer = createReducer(initialState, {         //for fetching users
   allUsersRequest: (state) => {
     state.loading = true;
   },

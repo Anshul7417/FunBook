@@ -13,7 +13,7 @@ import {
 } from "@mui/icons-material";
 
 const Header = () => {
-  const [tab, setTab] = useState(window.location.pathname);
+  const [tab, setTab] = useState(window.location.pathname);           // it is getting url from search bar
   return (
     <div className="header">
       <Link to="/" onClick={() => setTab("/")}>
@@ -26,7 +26,7 @@ const Header = () => {
         ) : (
           <AddOutlined />
         )}
-      </Link>  
+      </Link>
 
       <Link to="/search" onClick={() => setTab("/search")}>
         {tab === "/search" ? (

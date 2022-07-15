@@ -13,7 +13,7 @@ exports.createPost = async (req, res) => {
       caption: req.body.caption,
       image: {
         public_id: myCloud.public_id,
-        url: myCloud.secret_url,
+        url: myCloud.secure_url,
       },
 
       owner: req.user._id,
