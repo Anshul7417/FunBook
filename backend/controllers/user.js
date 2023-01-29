@@ -199,7 +199,7 @@ exports.updateProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
 
-    const { name, email } = req.body;
+    const { name, email, avatar } = req.body;
 
     if (name) {
       user.name = name;
