@@ -10,7 +10,7 @@ const postSchema = new mongoose.Schema({
 
     owner: {      //id of the user that has posted
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "User",    //it references to the user id..The ref option is what tells Mongoose which model to use during population,
     },
 
     createdAt: {

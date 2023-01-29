@@ -52,6 +52,10 @@ exports.deletePost = async (req, res) => {
       });
     }
 
+    // !==	not equal value or not equal type
+
+    // ===	equal value and equal type
+
     if (post.owner.toString() !== req.user._id.toString()) {    // checking owner==post deleting user
       return res.status(401).json({
         success: false,

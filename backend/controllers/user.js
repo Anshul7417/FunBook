@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const Post = require("../models/Post");
-const {sendEmail} = require("../middlewares/sendEmail");
-const cloudinary=require("cloudinary");
+const { sendEmail } = require("../middlewares/sendEmail");
+const cloudinary = require("cloudinary");
 
 exports.register = async (req, res) => {
   try {
@@ -367,7 +367,7 @@ exports.getAllUsers = async (req, res) => {
     const users = await User.find({
       name: { $regex: req.query.name, $options: "i" },
     });
-
+    // it is uded to find user type ab find abhi options here means case insensitive
     res.status(200).json({
       success: true,
       users,

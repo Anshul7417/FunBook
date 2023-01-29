@@ -70,7 +70,7 @@ function App() {
           element={isAuthenticated ? <UserProfile /> : <Login />}
         />
 
-        <Route path="search" element={<Search />} />
+        <Route path="search" element={isAuthenticated ? <Search /> : <Login />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
